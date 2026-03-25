@@ -9,7 +9,7 @@
 
 ---
 
-## 🏦 Project Overview (Deutsche Bank Context)
+## 🏦 Project Overview 
 
 This project was built to demonstrate technical excellence in the following areas required for the **Merchant Solutions** group:
 
