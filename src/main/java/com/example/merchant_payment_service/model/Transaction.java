@@ -45,7 +45,7 @@ public class Transaction {
         if (this.status == null) this.status = TransactionStatus.PENDING;
     }
 
-    // --- GETTERS AND SETTERS (Manual version for VS Code) ---
+    // --- GETTERS AND SETTERS ---
     public UUID getId() { return id; }
     public String getMerchantId() { return merchantId; }
     public void setMerchantId(String merchantId) { this.merchantId = merchantId; }
