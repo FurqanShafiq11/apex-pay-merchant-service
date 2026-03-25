@@ -10,6 +10,8 @@ import com.example.merchant_payment_service.model.Transaction;
 import com.example.merchant_payment_service.model.TransactionStatus;
 import com.example.merchant_payment_service.repository.TransactionRepository;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @Service
 public class PaymentService {
 
@@ -20,28 +22,24 @@ public class PaymentService {
     }
 
     @Transactional
+    @CircuitBreaker(name = "bankService", fallbackMethod = "handleBankFailure")
     public Transaction processPayment(PaymentRequest request) {
-        // 1. IDEMPOTENCY CHECK: Check if this transaction already exists
+        // 1. Idempotency Check
         Optional<Transaction> existingTx = repository.findByMerchantIdAndIdempotencyKey(
                 request.getMerchantId(), request.getIdempotencyKey());
 
-        if (existingTx.isPresent()) {
-            // Return existing record instead of creating a new one
-            return existingTx.get();
-        }
+        if (existingTx.isPresent()) return existingTx.get();
 
-        // 2. CREATE NEW TRANSACTION
+        // 2. Create Pending Transaction
         Transaction transaction = new Transaction();
         transaction.setMerchantId(request.getMerchantId());
         transaction.setAmount(request.getAmount());
         transaction.setCurrency(request.getCurrency());
         transaction.setIdempotencyKey(request.getIdempotencyKey());
         transaction.setStatus(TransactionStatus.PENDING);
-
-        // Save initially as PENDING
         transaction = repository.save(transaction);
 
-        // 3. SIMULATE EXTERNAL BANK AUTHORIZATION
+        // 3. Simulate Bank Call (This is what the Circuit Breaker watches)
         boolean authSuccess = simulateBankAuthorization();
 
         if (authSuccess) {
@@ -50,13 +48,26 @@ public class PaymentService {
             transaction.setStatus(TransactionStatus.FAILED);
         }
 
-        // 4. UPDATE AND RETURN
         return repository.save(transaction);
     }
 
+    // FALLBACK METHOD: This runs if the Bank is down or the Circuit is Open
+    public Transaction handleBankFailure(PaymentRequest request, Throwable t) {
+        Transaction transaction = new Transaction();
+        transaction.setMerchantId(request.getMerchantId());
+        transaction.setAmount(request.getAmount());
+        transaction.setCurrency(request.getCurrency());
+        transaction.setIdempotencyKey(request.getIdempotencyKey());
+        transaction.setStatus(TransactionStatus.FAILED);
+        // In a real bank, we'd log this specifically as a "System Timeout/Error"
+        return transaction;
+    }
+
     private boolean simulateBankAuthorization() {
-        // In a real bank, this would be an API call to a card network (Visa/MC)
-        // For now, let's assume 90% of payments succeed
-        return Math.random() < 0.9;
+        // Randomly simulate a slow/failing network (10% chance of error)
+        if (Math.random() < 0.1) {
+            throw new RuntimeException("Bank Network Timeout");
+        }
+        return true;
     }
 }
