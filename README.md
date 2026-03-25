@@ -55,20 +55,21 @@ The provided `k8s-deployment.yaml` defines a multi-replica deployment strategy w
 
 ### Running Locally
 ```bash
-# Build the project
+### Build the project
 ./mvnw clean package -DskipTests
 
-# Start the application
+### Start the application
 ./mvnw spring-boot:run
 
-**### Running via Docker**
+### Running via Docker
 docker pull furqan11s/merchant-payment-service:latest
 docker run -p 8080:8080 furqan11s/merchant-payment-service:latest
 
-🧪 API Documentation
+### API Documentation
 Create a Merchant Payment
 Endpoint: POST /api/v1/payments
-**Sample Request Body:**
+
+### Sample Request Body:
 {
   "merchantId": "DB-BERLIN-001",
   "amount": 1250.75,
@@ -76,7 +77,7 @@ Endpoint: POST /api/v1/payments
   "idempotencyKey": "tx-uuid-998877"
 }
 
-**Response (201 Created):**
+### Response (201 Created):
 {
   "id": "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6",
   "status": "SUCCESS",
@@ -86,7 +87,7 @@ Endpoint: POST /api/v1/payments
   "createdAt": "2024-03-25T14:43:00"
 }
 
-📊 Monitoring & Databases
+### Monitoring & Databases
 Health Check: http://localhost:8080/actuator/health
 H2 Database Console: http://localhost:8080/h2-console
 JDBC URL: jdbc:h2:mem:paymentdb
