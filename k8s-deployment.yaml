@@ -17,7 +17,6 @@ spec:
         image: furqan11s/merchant-payment-service:latest
         ports:
         - containerPort: 8080
-        # This shows you know how GKE monitors health:
         livenessProbe:
           httpGet:
             path: /actuator/health
