@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: merchant-payment-service
 spec:
-  replicas: 2 # Show you understand "High Availability"
+  replicas: 2 
   selector:
     matchLabels:
       app: payment-api
