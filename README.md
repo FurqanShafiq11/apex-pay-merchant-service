@@ -1,6 +1,5 @@
 # ApexPay: Merchant Solutions & Settlement Engine
-
-[![Java CI with Maven](https://github.com/furqan11s/merchant-payment-service/actions/workflows/maven.yml/badge.svg)](https://github.com/furqan11s/merchant-payment-service/actions)
+[![Java CI with Maven](https://github.com/FurqanShafiq11/apex-pay-merchant-service/actions/workflows/maven.yml/badge.svg)](https://github.com/FurqanShafiq11/apex-pay-merchant-service/actions/workflows/maven.yml)
 ![Java Version](https://img.shields.io/badge/Java-21-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.x-green)
 ![Docker](https://img.shields.io/badge/Docker-Verified-blue)
@@ -10,7 +9,7 @@
 
 ---
 
-## 🏦 Project Overview (Deutsche Bank Context)
+## 🏦 Project Overview 
 
 This project was built to demonstrate technical excellence in the following areas required for the **Merchant Solutions** group:
 
